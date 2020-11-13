@@ -1,4 +1,4 @@
-from openpose import Openpose
+from NADS_Net_Solver import NADS_Net_Solver
 import argparse
 
 def parse_args():
@@ -7,10 +7,10 @@ def parse_args():
     parser.add_argument("-save", "--from_save_folder", help="whether resume from the save path",action="store_true")
     args = parser.parse_args()
     return args
-# todo: net's capacity? check resnet50 and the following layers, especilly the resnet structure
+
 if __name__ == '__main__':
     args = parse_args()
-    openpose = Openpose()
+    nads_net = NADS_Net_Solver()
     if args.resume:
-        openpose.resume_training_load(from_save_folder = args.from_save_folder)
-    openpose.train()
+        nads_net.resume_training_load(from_save_folder = args.from_save_folder)
+    nads_net.train()

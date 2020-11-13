@@ -42,26 +42,29 @@ class JointType(IntEnum):
     """ 左耳 """
 
 params = {
-    'coco_dir': '/home/alanschen/dataset/coco2017_2/',
-    'pretrained_path' : 'models/pretrained_vgg_base.pth',
-    # training params
+    'coco_dir': '/home/alanschen/dataset/coco2017/',
+    'work_space': Path('work_space'),
+    'log_path': 'work_space/log',
+
+    'lr': 1e-4,
+    # worker number mainly depends on your cpu core num
+    'num_workers': 8,
+    'batch_size': 8,
+
+    # 'eva_num': 100,
+    'eva_num': 1,
+    # board 100 times in each epoch
+    'board_loss_interval': 100,
+    'eval_interval': 8,
+    'board_pred_image_interval': 2,
+    'save_interval': 8,
+
     'min_keypoints': 5,
     'min_area': 32 * 32,
     'insize': 368,
     'downscale': 8,
     'paf_sigma': 8,
     'heatmap_sigma': 7,
-    'batch_size': 8,
-    # 'lr': 1e-3,
-    'lr': 1e-4,
-    'num_workers': 8,
-    'eva_num': 100,
-    'board_loss_interval': 100,
-    'eval_interval': 4,
-    'board_pred_image_interval': 2,
-    'save_interval': 2,
-    'log_path': 'work_space/log',
-    'work_space': Path('work_space'),
     
     'min_box_size': 64,
     'max_box_size': 512,
@@ -124,32 +127,5 @@ params = {
         JointType.RightKnee,
         JointType.LeftFoot,
         JointType.RightFoot
-    ],
-
-    # face params
-    'face_inference_img_size': 368,
-    'face_heatmap_peak_thresh': 0.1,
-    'face_crop_scale': 1.5,
-    'face_line_indices': [
-        [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 8], [8, 9], [9, 10], [10, 11], [11, 12], [12, 13], [13, 14], [14, 15], [15, 16], # 輪郭
-        [17, 18], [18, 19], [19, 20], [20, 21], # 右眉
-        [22, 23], [23, 24], [24, 25], [25, 26], # 左眉
-        [27, 28], [28, 29], [29, 30], # 鼻
-        [31, 32], [32, 33], [33, 34], [34, 35], # 鼻下の横線
-        [36, 37], [37, 38], [38, 39], [39, 40], [40, 41], [41, 36], # 右目
-        [42, 43], [43, 44], [44, 45], [45, 46], [46, 47], [47, 42], # 左目
-        [48, 49], [49, 50], [50, 51], [51, 52], [52, 53], [53, 54], [54, 55], [55, 56], [56, 57], [57, 58], [58, 59], [59, 48], # 唇外輪
-        [60, 61], [61, 62], [62, 63], [63, 64], [64, 65], [65, 66], [66, 67], [67, 60] # 唇内輪
-    ],
-
-    # hand params
-    'hand_inference_img_size': 368,
-    'hand_heatmap_peak_thresh': 0.1,
-    'fingers_indices': [
-        [[0, 1], [1, 2], [2, 3], [3, 4]],
-        [[0, 5], [5, 6], [6, 7], [7, 8]],
-        [[0, 9], [9, 10], [10, 11], [11, 12]],
-        [[0, 13], [13, 14], [14, 15], [15, 16]],
-        [[0, 17], [17, 18], [18, 19], [19, 20]],
-    ],
+    ]
 }

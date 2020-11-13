@@ -4,17 +4,16 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.model_zoo as model_zoo
-import numpy as np
 
 model_urls = {
     'resnet50': 'https://download.pytorch.org/models/resnet50-19c8e357.pth'
 }
 
+
 class NADS_Net(nn.Module):
-    def __init__(self, resnet_pretrained = True):
+    def __init__(self, resnet_pretrained=True):
         super(NADS_Net, self).__init__()
         self.resnet50 = resnet50()
-
 
         self.relu = nn.ReLU(inplace=True)
         # FPN layers
@@ -34,10 +33,11 @@ class NADS_Net(nn.Module):
         self.concat_2 = self._concat_block()
 
         # confidence maps and PAFs(part affinity fields)
-        # the # of out_channel equals to keypoints' amount + 1(background) + 1(neck)
-        self.keypoint_heatmaps = self._heatmap_block(19)
-        # out_channel equals to limbs' amount, 9 limbs, 2 maps per limb
-        self.PAF_heatmaps = self._heatmap_block(38)
+        # the number of keypoints detection head out_channel is equal to
+        # keypoints' number in training dataset + 1(background) + 1(neck)
+        self.keypoint_heatmaps = self._heatmap_block(17 + 1 + 1)
+        # the number of PAFs detection head out_channel is twice as the number of keypoints channel
+        self.PAF_heatmaps = self._heatmap_block(17 * 2 + 2 + 2)
 
         # He initialization
         for m in self.modules():
@@ -55,18 +55,19 @@ class NADS_Net(nn.Module):
             model_dict.update(resnet_50_pretrained)
             self.resnet50.load_state_dict(model_dict)
 
-    def _concat_block(self, scale_factor = 1):
-        # 看NADA-Net论文中，最后concat出来的feature maps 只有512个通道，也就是p2-5每个被压缩成了128通道
+    def _concat_block(self, scale_factor=1):
+        # in NADS-Net paper, the channel number of concated feature maps is 512,
+        # i.e. channel number of p2-p5 is downsampling from 256 to 128 then concat
         layers = [
             nn.Conv2d(256, 256, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
             nn.Conv2d(256, 128, kernel_size=3, padding=1)
         ]
-        # if 1 != scale_factor:
-        #     layers.append(nn.Upsample(scale_factor=scale_factor, mode="bilinear", align_corners=True))
         return nn.Sequential(*layers)
+
     def _concat_upsample(self, x, H, W):
         return F.upsample(x, size=(H, W), mode='bilinear', align_corners=True)
+
     def _heatmap_block(self, out_channels):
         layers = [
             nn.Conv2d(512, 512, kernel_size=3, padding=1),
@@ -83,7 +84,7 @@ class NADS_Net(nn.Module):
 
     def forward(self, x):
 
-        # ResNet_50
+        # ResNet_50 outputs feature maps in 4 levels
         c2, c3, c4, c5 = self.resnet50(x)
 
         # FPN - upsampling and lateral connection
@@ -102,7 +103,7 @@ class NADS_Net(nn.Module):
             self._concat_upsample(self.relu(self.concat_5(p5)), concat_upsample_h, concat_upsample_w),
             self._concat_upsample(self.relu(self.concat_4(p4)), concat_upsample_h, concat_upsample_w),
             self._concat_upsample(self.relu(self.concat_3(p3)), concat_upsample_h, concat_upsample_w),
-            self.relu(self.concat_2(p2))], dim = 1)
+            self.relu(self.concat_2(p2))], dim=1)
 
         keypoint_heatmaps = self.keypoint_heatmaps(concated_feature_maps)
         PAF_heatmaps = self.PAF_heatmaps(concated_feature_maps)
