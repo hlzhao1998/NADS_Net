@@ -38,7 +38,7 @@ the trained model is placed in:
 
 1. [google driver]()
 2. [one drive]()
-3. [pan baidu](链接: https://pan.baidu.com/s/1sRzhS3EGpwNYcXpBbcEZHg) and the password: **aauu**
+3. [pan baidu](https://pan.baidu.com/s/1sRzhS3EGpwNYcXpBbcEZHg) and the password: **aauu**
 
 after downloading the file **nads_model.pth**, copy it into **work_space/model/**
 
@@ -79,7 +79,7 @@ Give the origin test image and the inferenced image as follows:
 
 ![origin image](https://github.com/ChenShuwei1001/NADS_Net/blob/master/data/author.jpg)
 
-![inferenced_image](https://github.com/ChenShuwei1001/NADS_Net/blob/master/data/result.jpg)
+![inferenced_image](https://github.com/ChenShuwei1001/NADS_Net/blob/master/data/result.png)
 
 ## Train
 
