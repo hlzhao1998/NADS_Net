@@ -28,7 +28,7 @@ NADS-Net is a network  with there detection head, i.e. the keypoints detection h
 **git clone** and **cd into** the project:
 
 ```
-git clone git@github.com:ChenShuwei1001/NADS_Net.git
+git clone https://github.com/ChenShuwei1001/NADS_Net.git
 cd NADS_Net
 ```
 
