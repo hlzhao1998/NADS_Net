@@ -1,0 +1,6 @@
+opencv-python
+tqdm
+tensorboardX
+scipy
+matplotlib
+torch

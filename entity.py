@@ -42,7 +42,7 @@ class JointType(IntEnum):
     """ 左耳 """
 
 params = {
-    'coco_dir': '/home/alanschen/dataset/coco2017/',
+    'coco_dir': 'coco/',
     'work_space': Path('work_space'),
     'log_path': 'work_space/log',
 
@@ -51,20 +51,21 @@ params = {
     'num_workers': 8,
     'batch_size': 8,
 
-    # 'eva_num': 100,
-    'eva_num': 1,
+    'eva_num': 32,
     # board 100 times in each epoch
     'board_loss_interval': 100,
     'eval_interval': 8,
     'board_pred_image_interval': 2,
     'save_interval': 8,
 
+    # maybe don't have to understand the params below
+    'paf_sigma': 8,
+    'heatmap_sigma': 7,
+
     'min_keypoints': 5,
     'min_area': 32 * 32,
     'insize': 368,
     'downscale': 8,
-    'paf_sigma': 8,
-    'heatmap_sigma': 7,
     
     'min_box_size': 64,
     'max_box_size': 512,
